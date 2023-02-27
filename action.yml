@@ -20,13 +20,13 @@ runs:
   using: "composite"
   steps:
     - name: Setup the .env file
-      run: cp ${{ github.action_path }}/${{ inputs.env-file }} ${{ github.action_path }}/.env
+      run: cp ${{ inputs.env-file }} .env
       shell: bash
     - name: Generate the app key
-      run: php ${{ github.action_path }}/artisan key:generate
+      run: php artisan key:generate
       shell: bash
       if: ${{ inputs.generate-key == 'true' }}
     - name: Run the migrations
-      run: php ${{ github.action_path }}/artisan migrate
+      run: php artisan migrate
       shell: bash
       if: ${{ inputs.run-migrations == 'true' }}
