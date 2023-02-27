@@ -1,0 +1,32 @@
+name: 'Setup Laravel'
+description: 'Setup a Laravel application'
+branding:
+  icon: 'play-circle'
+  color: 'red'
+inputs:
+  env-file:
+    description: 'Name of the dotenv file to copy to `.env`'
+    required: false
+    default: .env.example
+  generate-key:
+    description: 'Should an app key be generated?'
+    required: false
+    default: 'true'
+  run-migrations:
+    description: 'Should the migrations be run?'
+    required: false
+    default: 'true'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup the .env file
+      run: cp ${{ github.action_path }}/${{ inputs.env-file }} ${{ github.action_path }}/.env
+      shell: bash
+    - name: Generate the app key
+      run: php ${{ github.action_path }}/artisan key:generate
+      shell: bash
+      if: ${{ inputs.generate-key == 'true' }}
+    - name: Run the migrations
+      run: php ${{ github.action_path }}/artisan migrate
+      shell: bash
+      if: ${{ inputs.run-migrations == 'true' }}
